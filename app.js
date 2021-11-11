@@ -83,9 +83,20 @@ app.post("/", function(req, res){
 
 app.post("/delete", function(req, res){
   const checkedItemId = req.body.item;
-  const title = req.body.page;
-  console.log(req.body.item);
-  Item.findByIdAndRemove(checkedItemId, function(err){if(err){console.log(err)}else{console.log("Deleted successfully! "+checkedItemId); res.redirect("/" + title);}});
+  const listName = req.body.page;
+  
+  if(listName === "Today"){
+    Item.findOneAndDelete({ _id: checkedItemId}, function(err){
+      if(err){console.log(err)}
+      else{
+        console.log("Deleted successfully! "); res.redirect("/");
+      }
+    });
+  } else {
+    List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err, foundList){
+      if(!err){res.redirect("/"+listName);}
+    });
+  }
 });
 
 // NEW PAGE TEMPLATE -------------------------->
