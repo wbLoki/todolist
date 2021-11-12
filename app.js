@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const app = express();
+require('dotenv').config();
 
 app.set('view engine', 'ejs');
 
@@ -9,7 +10,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://root:root@cluster0.15wky.mongodb.net/todolistDB?retryWrites=true&w=majority");
+mongoose.connect(process.env.myDatabase);
 
 const itemsSchema = {
   name: String
